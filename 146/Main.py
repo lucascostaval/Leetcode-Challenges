@@ -1,16 +1,18 @@
-class ListNode:
-    def __init__(self, val=0, next=None):
+from typing import Dict
+
+class Node:
+    def __init__(self, val: int, next=None):
         self.val = val
         self.next = next
 
 class Queue:
     def __init__(self):
-        self.head = None
-        self.tail = None
-        self.length = 0
+        self.head: Node = None
+        self.tail: Node = None
+        self.length: int = 0
     
-    def add(self, x) -> None:
-        new_node = ListNode(x)
+    def add(self, x: int) -> None:
+        new_node = Node(x)
         if self.length == 0:
             self.head = new_node
             self.tail = new_node
@@ -20,47 +22,52 @@ class Queue:
         self.length += 1
 
     def pop(self) -> int:
-        if self.length == 0:
-            return -1
+        if self.length == 0: return None
         if self.length == 1:
-            removed = self.head.val
+            removed: Node = self.head
             self.head = None
             self.tail = None
             self.length = 0
-            return removed
-        removed = self.head.val
+            return removed.val
+        removed: Node = self.head
         self.head = self.head.next
         self.length -= 1
-        return removed
+        return removed.val
 
 class LRUCache:
+
     def __init__(self, capacity: int):
-        self.capacity = capacity
         self.queue = Queue()
-        self.h = {}
-        self.size = 0
+        self.capacity: int = capacity
+        self.size: int = 0
+        self.key_to_times: Dict[int, int] = {}
+        self.key_to_value: Dict[int, int] = {}
         
+
     def get(self, key: int) -> int:
-        if key in self.h:
-            return self.h[key]
+        if key in self.key_to_value:
+            self.queue.add(key)
+            self.key_to_times[key] += 1
+            return self.key_to_value[key]
         return -1
 
     def put(self, key: int, value: int) -> None:
+        if key in self.key_to_value:
+            self.key_to_value[key] = value
+            self.queue.add(key)
+            self.key_to_times[key] += 1
+            return
         if self.size == self.capacity:
-            key_to_evict = self.queue.pop()
-            self.h.pop(key_to_evict)
+            while True:
+                queue_item = self.queue.pop()
+                if self.key_to_times[queue_item] > 0: self.key_to_times[queue_item] -= 1
+                else:
+                    del self.key_to_times[queue_item]
+                    del self.key_to_value[queue_item]
+                    break
             self.size -= 1
-        self.h[key] = value
+        if key in self.key_to_value: self.key_to_times[key] += 1
+        else: self.key_to_times[key] = 0
+        self.key_to_value[key] = value
         self.size += 1
         self.queue.add(key)
-
-lruCache = LRUCache(2)
-lruCache.put(1, 1)
-lruCache.put(2, 2)
-lruCache.get(1)
-lruCache.put(3, 3)
-lruCache.get(2)
-lruCache.put(4, 4)
-lruCache.get(1)
-lruCache.get(3)
-lruCache.get(4)
