@@ -127,12 +127,45 @@ class LinkedList:
             head2 = head2.next
         return resulting_ll
 
-ll1 = LinkedList()
-arr1 = [1, 4, 2, 9, -3, 2, -1, 5, 5, 2]
-for x in arr1: ll1.add_front(x)
-print(2 in ll1)
-ll2 = LinkedList()
-arr2 = [4, 2, -1]
-for x in arr2: ll2.add_front(x)
-ll3 = ll1+ll2
-print(ll3)
+class MyCircularQueue:
+
+    def __init__(self, k: int):
+        self.ll = LinkedList()
+        self.capacity = k
+        self.length = 0
+
+    def enQueue(self, value: int) -> bool:
+        if self.isFull(): return False
+        self.ll.add_last(value)
+        self.length += 1
+        return True
+
+    def deQueue(self) -> bool:
+        if self.isEmpty(): return False
+        self.ll.pop_front()
+        self.length -= 1
+        return True
+
+    def Front(self) -> int:
+        if self.length == 0: return -1
+        return self.ll.head.val
+
+    def Rear(self) -> int:
+        if self.length == 0: return -1
+        return self.ll.tail.val
+
+    def isEmpty(self) -> bool:
+        return self.length == 0
+        
+    def isFull(self) -> bool:
+        return self.length == self.capacity
+
+
+# Your MyCircularQueue object will be instantiated and called as such:
+# obj = MyCircularQueue(k)
+# param_1 = obj.enQueue(value)
+# param_2 = obj.deQueue()
+# param_3 = obj.Front()
+# param_4 = obj.Rear()
+# param_5 = obj.isEmpty()
+# param_6 = obj.isFull()

@@ -14,24 +14,20 @@ class Node:
 
 class Solution:
     def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        result = Node(0, None, None, None)
-        tmp = result
-        before = None
+        result = head
+        after = head
         while head is not None:
-            result.next = Node(head.val, None, None, None)
-            result = result.next
-            result.prev = before
-            before = result
+            after = head.next
             if head.child is not None:
                 sub_list = self.flatten(head.child)
-                while sub_list is not None:
-                    result.next = Node(sub_list.val, None, None, None)
-                    result = result.next
-                    result.prev = before
-                    before = result
-                    sub_list = sub_list.next
-            head = head.next
-        return tmp.next
+                head.child = None
+                head.next = sub_list
+                sub_list.prev = head
+                while sub_list.next is not None: sub_list = sub_list.next
+                sub_list.next = after
+                if after is not None: after.prev = sub_list
+            head = after
+        return result
 
 
 def make_ll_from_array(lst: List[int]) -> Node:
@@ -47,7 +43,11 @@ def make_ll_from_array(lst: List[int]) -> Node:
 
 def print_ll(head: Node) -> None:
     while head is not None:
-        print(head.val, head, head.next, head.prev, head.child)
+        #print(head.val, head, head.next, head.prev, head.child)
+        print("\nNew Node")
+        print(head.val)
+        if head.next is not None: print(head.next.val)
+        if head.prev is not None: print(head.prev.val)
         head = head.next
 
 sol = Solution()
@@ -55,5 +55,6 @@ arr = [1, 2, 3, 4, 5, 6]
 head = make_ll_from_array(arr)
 head[2].child = make_ll_from_array([7, 8, 9, 10])
 head[2].child[1].child = make_ll_from_array([11, 12])
+sol.test(head)
 head = sol.flatten(head)
 print_ll(head)
