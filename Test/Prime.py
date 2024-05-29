@@ -20,7 +20,7 @@ def eratosthenes2(a: int, b: int) -> List[int]:
     is_prime_lst: List[bool] = [True]*b
     for i in range(2, int(b**0.5)+1):
         for j in range(2*i, b, i): is_prime_lst[j] = False
-    return [x for x in range(min(a,2), b) if is_prime_lst[x]]
+    return [x for x in range(max(a,2), b) if is_prime_lst[x]]
 
 def decompose_into_primes(x: int) -> Dict[int, int]:
     result = {}
@@ -45,7 +45,7 @@ def decompose_into_unique_primes(x: int) -> List[int]:
     return result
 
  
-n = 100
+n = 50
 print(eratosthenes(n))
 print(decompose_into_primes(n))
 print(decompose_into_unique_primes(n))

@@ -46,6 +46,7 @@ class Solution:
                 arr2.append(result)
         print(len(arr1), len(arr2))
         print(arr1, arr2)
+        print()
 
         # result1 = 0
         # both_pass_1 = 0

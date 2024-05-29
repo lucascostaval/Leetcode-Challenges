@@ -1,32 +1,24 @@
 class Solution:
     def nthUglyNumber(self, n: int) -> int:
-        number = 1
-        lst_power_2 = []
-        max_integer = 9223372036854775807
-        while number <= max_integer:
-            lst_power_2.append(number)
-            number *= 2
-        number = 1
-        lst_power_3 = []
-        while number <= max_integer:
-            lst_power_3.append(number)
-            number *= 3
-        number = 1
-        lst_power_5 = []
-        while number <= max_integer:
-            lst_power_5.append(number)
-            number *= 5
+        max_integer = 2123366400
         lst = []
-        for i in range(len(lst_power_5)):
-            for j in range(len(lst_power_3)):
-                for k in range(len(lst_power_2)):
-                    number = lst_power_5[i]*lst_power_3[j]*lst_power_2[k]
-                    if number > max_integer: break
-                    lst.append(number)
+        a = 1
+        while True:
+            b = 1
+            while True:
+                c = 1
+                while True:
+                    if a*b*c > max_integer: break
+                    lst.append(a*b*c)
+                    c *= 2
+                b *= 3
+                if a*b > max_integer: break
+            if a > max_integer: break
+            a *= 5
         lst.sort()
         return lst[n-1]
 
 
 sol = Solution()
-n = 11
+n = 1690
 print(sol.nthUglyNumber(n))
